@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import store from '../store'
+import axios from 'axios'
 Vue.use(Router)
 
 const routerPush = Router.prototype.push;
@@ -45,8 +46,25 @@ const routes = [
     
     
 ]
-
-export default new Router({
+const router =new Router({
     mode:'history',
+    base:'/page/',
     routes,
 })
+router.beforeEach((to, from, next)=>{
+    const token = window.localStorage.getItem('page_builder_token')
+    if(!store.state.curUserInfo.id&&token){
+        axios.get('/checkToken')
+        .then((res)=>{
+            store.state.curUserInfo.id = res.data.data.userId
+            store.state.curUserInfo.name = res.data.data.userName
+        }).then(()=>{
+            next()
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    }
+    else{next()}
+})
+export default router

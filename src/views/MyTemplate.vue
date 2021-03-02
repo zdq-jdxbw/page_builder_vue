@@ -10,6 +10,11 @@
 </template>
 <script>
 export default {
+  beforeRouteEnter: (to, from, next) => {
+    next((vm) => {
+      if (!vm.$store.state.curUserInfo.id) vm.$router.push("/login");
+    });
+  },
   data() {
     return {
       data: [],

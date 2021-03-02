@@ -29,7 +29,7 @@ axios.interceptors.request
   }
   const token = window.localStorage.getItem('page_builder_token')
   if (token) {
-    config.headers.common["Authorization"] = "Bearer" + token
+    config.headers.common["Authorization"] = "Bearer " +[token]
     return config
   }
   return config
@@ -39,6 +39,9 @@ err=>{
 }
 )
 Vue.prototype.$axios = axios;
+
+
+
 new Vue({
   router,
   store,
